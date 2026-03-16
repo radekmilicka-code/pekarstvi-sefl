@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pekařství Šefl | Kompletní seznam produktů</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── PRODUCT ITEM SELECTION ── */
+    .product-item {
+      cursor: pointer;
+      user-select: none;
+    }
+    .product-item.selected {
+      background: rgba(200,146,42,0.1);
+      border-color: var(--gold);
+      box-shadow: 0 0 0 1px var(--gold);
+    }
+    .check-indicator {
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid rgba(200,146,42,0.35);
+      border-radius: 3px;
+      flex-shrink: 0;
+      margin-right: 0.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+    .product-item.selected .check-indicator {
+      background: var(--gold);
+      border-color: var(--gold);
+    }
+    .product-item.selected .check-indicator::after {
+      content: '';
+      width: 5px;
+      height: 9px;
+      border: 2px solid var(--dark-brown);
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg) translateY(-1px);
+      display: block;
+    }
+
+    /* ── STICKY BASKET BAR ── */
+    .basket-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 1050;
+      background: var(--dark-brown);
+      border-top: 2px solid var(--gold);
+      padding: 1rem 0;
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 -8px 40px rgba(0,0,0,0.3);
+    }
+    .basket-bar.visible {
+      transform: translateY(0);
+    }
+    .basket-bar-inner {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .basket-count {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--wheat);
+      white-space: nowrap;
+    }
+    .basket-count span {
+      color: var(--gold);
+      font-size: 1.1rem;
+      font-family: 'Lora', serif;
+    }
+    .basket-items-preview {
+      flex: 1;
+      font-size: 0.8rem;
+      color: rgba(232,213,163,0.5);
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .basket-clear {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(232,213,163,0.4);
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color 0.2s;
+      white-space: nowrap;
+      padding: 0;
+    }
+    .basket-clear:hover { color: var(--accent); }
+    .btn-poptat {
+      background: var(--gold);
+      color: var(--dark-brown);
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.75rem 1.8rem;
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .btn-poptat:hover {
+      background: var(--dark-gold);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(200,146,42,0.3);
+    }
+
+    /* ── MODAL ── */
+    .modal-content {
+      border: 1px solid rgba(200,146,42,0.25);
+      border-radius: 4px;
+      background: var(--cream);
+    }
+    .modal-header {
+      border-bottom: 1px solid rgba(200,146,42,0.15);
+      padding: 1.5rem 2rem;
+    }
+    .modal-title {
+      font-family: 'Lora', serif;
+      font-size: 1.4rem;
+      color: var(--dark-brown);
+    }
+    .modal-body { padding: 2rem; }
+    .selected-products-preview {
+      background: #fff;
+      border: 1px solid rgba(200,146,42,0.2);
+      border-radius: 3px;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1.5rem;
+      max-height: 140px;
+      overflow-y: auto;
+    }
+    .selected-products-preview-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.6rem;
+    }
+    .selected-product-tag {
+      display: inline-block;
+      background: rgba(200,146,42,0.1);
+      border: 1px solid rgba(200,146,42,0.25);
+      color: var(--dark-brown);
+      font-size: 0.78rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 2px;
+      margin: 0.2rem 0.2rem 0.2rem 0;
+    }
+    .form-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--warm-gray);
+      margin-bottom: 0.4rem;
+    }
+    .form-control {
+      border: 1px solid rgba(200,146,42,0.25);
+      border-radius: 2px;
+      background: #fff;
+      color: var(--dark-brown);
+      padding: 0.7rem 1rem;
+      font-size: 0.92rem;
+    }
+    .form-control:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(200,146,42,0.12);
+      outline: none;
+    }
+
+    body { padding-bottom: 80px; }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">Pekařství <span>Šefl</span></a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#nav" style="color:var(--wheat)">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+        <li class="nav-item"><a class="nav-link" href="index.html#nabidka">Nabídka</a></li>
+        <li class="nav-item"><a class="nav-link" href="index.html#onas">O nás</a></li>
+        <li class="nav-item"><a class="nav-link" href="index.html#kontakt">Kontakt</a></li>
+        <li class="nav-item"><a class="nav-link" href="index.html#rozvoz">Rozvoz</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Page Header -->
+<div class="page-header text-white">
+  <div class="container">
+    <a href="index.html#nabidka" class="btn-back mb-4">← Zpět na nabídku</a>
+    <span class="page-header-eyebrow">Sortiment</span>
+    <h1>Kompletní seznam<br><em>produktů</em></h1>
+    <p class="page-header-sub">Klikněte na produkty pro výběr · více než 100 druhů čerstvého pečiva</p>
+  </div>
+</div>
+
+<!-- Products Section -->
+<section class="products-section">
+  <div class="container">
+    <div class="row g-5">
+
+      <!-- Sidebar TOC -->
+      <div class="col-lg-3 d-none d-lg-block">
+        <div class="toc">
+          <div class="toc-title">Kategorie</div>
+          <a href="#chleby" class="toc-item">🥖 Chleby</a>
+          <a href="#bezne" class="toc-item">🥐 Běžné pečivo</a>
+          <a href="#celozrne" class="toc-item">🌾 Celozrnné pečivo</a>
+          <a href="#specialni" class="toc-item">⭐ Speciální pečivo</a>
+          <a href="#sladke" class="toc-item">🍰 Sladké pečivo</a>
+          <a href="#smazene" class="toc-item">🍩 Smažené výrobky</a>
+          <a href="#listove" class="toc-item">🥐 Listové těsto</a>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="col-lg-9">
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+          <input type="text" class="search-input" id="searchInput" placeholder="Hledat produkt…">
+          <button class="filter-btn active" data-filter="all">Vše</button>
+          <button class="filter-btn" data-filter="chleby">Chleby</button>
+          <button class="filter-btn" data-filter="sladke">Sladké</button>
+          <button class="filter-btn" data-filter="smazene">Smažené</button>
+          <span class="result-count" id="resultCount"></span>
+        </div>
+
+        <!-- CHLEBY -->
+        <div class="category-block reveal" id="chleby" data-category="chleby">
+          <div class="category-header">
+            <span class="category-emoji">🥖</span>
+            <span class="category-title">Chleby</span>
+            <span class="category-count">6 výrobků</span>
+          </div>
+          <div class="products-grid">
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Kmínový chléb</span><span class="product-item-weight">1400 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Chléb veka</span><span class="product-item-weight">700 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Chléb kulatý</span><span class="product-item-weight">350 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Veka chlebíčková</span><span class="product-item-weight">360 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Toustový chléb</span><span class="product-item-weight">400 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Strouhanka</span><span class="product-item-weight">1000 g</span></div>
+          </div>
+        </div>
+
+        <!-- BĚŽNÉ PEČIVO -->
+        <div class="category-block reveal" id="bezne" data-category="bezne">
+          <div class="category-header">
+            <span class="category-emoji">🥐</span>
+            <span class="category-title">Běžné pečivo</span>
+            <span class="category-count">9 výrobků</span>
+          </div>
+          <div class="products-grid">
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Rohlík tukový</span><span class="product-item-weight">43 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Bageta světlá</span><span class="product-item-weight">120 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Bageta malá</span><span class="product-item-weight">90 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Houska velká</span><span class="product-item-weight">140 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Houska malá</span><span class="product-item-weight">50 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Raženka</span><span class="product-item-weight">140 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Bulka velká – hamburger</span><span class="product-item-weight">140 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Bulka malá – hamburger</span><span class="product-item-weight">100 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Preclík</span><span class="product-item-weight">30 g</span></div>
+          </div>
+        </div>
+
+        <!-- CELOZRNNÉ -->
+        <div class="category-block reveal" id="celozrne" data-category="celozrne">
+          <div class="category-header">
+            <span class="category-emoji">🌾</span>
+            <span class="category-title">Celozrnné a cereální pečivo</span>
+            <span class="category-count">18 výrobků</span>
+          </div>
+          <div class="products-grid">
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Slovikorn</span><span class="product-item-weight">50 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Lupikorn</span><span class="product-item-weight">100 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Kornspitz</span><span class="product-item-weight">50 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Hrubozrnný rohlík</span><span class="product-item-weight">50 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Hrubozrnná bageta</span><span class="product-item-weight">180 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Žitná bageta</span><span class="product-item-weight">180 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Hrubozrnný dalamánek</span><span class="product-item-weight">260 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Hrubozrnná bulka + sýr</span><span class="product-item-weight">60 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Celozrnný duorohlík</span><span class="product-item-weight">50 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Celozrnná duobageta</span><span class="product-item-weight">140 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Korlandmix bageta</span><span class="product-item-weight">180 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Vícezrnná hvězdička</span><span class="product-item-weight">700 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Sladový chléb velký</span><span class="product-item-weight">600 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Sladový chléb malý</span><span class="product-item-weight">300 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Plundrakorn</span><span class="product-item-weight">250 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Kaiserka</span><span class="product-item-weight">60 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Raženka celozrnná</span><span class="product-item-weight">140 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Banketka celozrnná</span><span class="product-item-weight">25 g</span></div>
+          </div>
+        </div>
+
+        <!-- SPECIÁLNÍ -->
+        <div class="category-block reveal" id="specialni" data-category="specialni">
+          <div class="category-header">
+            <span class="category-emoji">⭐</span>
+            <span class="category-title">Speciální pečivo</span>
+            <span class="category-count">14 výrobků</span>
+          </div>
+          <div class="products-grid">
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Sýrový rohlík</span><span class="product-item-weight">55 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Cibulový rohlík</span><span class="product-item-weight">60 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Ciabatta</span><span class="product-item-weight">300 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Zelná placka</span><span class="product-item-weight">60 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Škvarková placka</span><span class="product-item-weight">60 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Bramborka</span><span class="product-item-weight">70 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Dýňová kostka</span><span class="product-item-weight">50 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Pizza rohlík</span><span class="product-item-weight">50 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Pizza rohlík sýr</span><span class="product-item-weight">60 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Pizza rohlík sýr + slanina</span><span class="product-item-weight">100 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Koláček niva</span><span class="product-item-weight">80 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Koláček lečo</span><span class="product-item-weight">80 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Kurkuma</span><span class="product-item-weight">50 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Párek v těstě</span><span class="product-item-weight">140 g</span></div>
+          </div>
+        </div>
+
+        <!-- SLADKÉ -->
+        <div class="category-block reveal" id="sladke" data-category="sladke">
+          <div class="category-header">
+            <span class="category-emoji">🍰</span>
+            <span class="category-title">Sladké pečivo</span>
+            <span class="category-count">40 výrobků</span>
+          </div>
+          <div class="products-grid">
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Šáteček tvarohový</span><span class="product-item-weight">85 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Šáteček ořechový</span><span class="product-item-weight">85 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Šáteček vanilkový</span><span class="product-item-weight">85 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Marmeládový rohlíček</span><span class="product-item-weight">85 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Jablečná koule</span><span class="product-item-weight">85 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Skořicový rohlíček</span><span class="product-item-weight">85 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Nugátová koule</span><span class="product-item-weight">60 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Sladký sen</span><span class="product-item-weight">100 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Vídeňský tvarožník</span><span class="product-item-weight">100 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Koláček větší</span><span class="product-item-weight">140 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Koláček švestkový</span><span class="product-item-weight">140 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Koláček meruňkový</span><span class="product-item-weight">140 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Koláček borůvkový</span><span class="product-item-weight">125 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Koláč pouťový</span><span class="product-item-weight">450 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Svatební koláček 6 cm</span><span class="product-item-weight">35 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Svatební koláček 12 cm</span><span class="product-item-weight">140 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Rumový koláček</span><span class="product-item-weight">30 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Rumový minikoláček</span><span class="product-item-weight">12.5 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Kynutý závin</span><span class="product-item-weight">450 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Vánočka super – mandle</span><span class="product-item-weight">950 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Vánočka malá</span><span class="product-item-weight">235 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Bochánek velký</span><span class="product-item-weight">460 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Bochánek malý</span><span class="product-item-weight">240 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Točenka</span><span class="product-item-weight">80 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Chala</span><span class="product-item-weight">180 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Plundra hřeben</span><span class="product-item-weight">90 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Mramorová bábovka malá</span><span class="product-item-weight">600 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Mramorová bábovka velká</span><span class="product-item-weight">850 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Piškotová buchta</span><span class="product-item-weight">250 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Česká buchta</span><span class="product-item-weight">80 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Dukátové buchtičky</span><span class="product-item-weight">400 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Perník</span><span class="product-item-weight">270 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Makovec</span><span class="product-item-weight">270 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Muffin</span><span class="product-item-weight">80 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Brioska</span><span class="product-item-weight">120 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Linecká kytička</span><span class="product-item-weight">55 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Štola velká</span><span class="product-item-weight">500 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Štola malá</span><span class="product-item-weight">250 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Sladký hamburger</span><span class="product-item-weight">100 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Biskupský chlebíček</span><span class="product-item-weight">1000 g</span></div>
+          </div>
+        </div>
+
+        <!-- SMAŽENÉ -->
+        <div class="category-block reveal" id="smazene" data-category="smazene">
+          <div class="category-header">
+            <span class="category-emoji">🍩</span>
+            <span class="category-title">Smažené výrobky</span>
+            <span class="category-count">6 výrobků</span>
+          </div>
+          <div class="products-grid">
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Tlučenský vdolek</span><span class="product-item-weight">100 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Kobliha</span><span class="product-item-weight">60 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Koblihová pusinka</span><span class="product-item-weight">140 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Donut s polevou</span><span class="product-item-weight">70 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Skořicová šiška</span><span class="product-item-weight">60 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Piroha</span><span class="product-item-weight">140 g</span></div>
+          </div>
+        </div>
+
+        <!-- LISTOVÉ TĚSTO -->
+        <div class="category-block reveal" id="listove" data-category="listove">
+          <div class="category-header">
+            <span class="category-emoji">🥐</span>
+            <span class="category-title">Výrobky z listového těsta</span>
+            <span class="category-count">11 výrobků</span>
+          </div>
+          <div class="products-grid">
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Listový závin – jablko</span><span class="product-item-weight">120 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Listový závin – mák</span><span class="product-item-weight">120 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Listový závin – tvaroh</span><span class="product-item-weight">120 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Listový závin – ořech</span><span class="product-item-weight">120 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Listový šáteček marmeláda</span><span class="product-item-weight">50 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Pudinkový vánek</span><span class="product-item-weight">90 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Višňovka / Meruňkovka</span><span class="product-item-weight">90 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Listový řez</span><span class="product-item-weight">60 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Vanilkový šnek</span><span class="product-item-weight">60 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Šunkový šnek</span><span class="product-item-weight">70 g</span></div>
+            <div class="product-item"><div class="check-indicator"></div><span class="product-item-name">Zelný závin se slaninou</span><span class="product-item-weight">100 g</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container text-center">
+    <div class="footer-copy">&copy; 2026 Pekařství Šefl · Všechna práva vyhrazena</div>
+  </div>
+</footer>
+
+<!-- Sticky Basket Bar -->
+<div class="basket-bar" id="basketBar">
+  <div class="container">
+    <div class="basket-bar-inner">
+      <div class="basket-count">Vybráno: <span id="basketCount">0</span> položek</div>
+      <div class="basket-items-preview" id="basketPreview"></div>
+      <button class="basket-clear" id="basketClear">Zrušit výběr</button>
+      <button class="btn-poptat" id="btnPoptat">Poptat vybrané →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Inquiry Modal -->
+<div class="modal fade" id="poptavkaModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Nezávazná poptávka</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zavřít"></button>
+      </div>
+      <div class="modal-body">
+
+        <form id="poptavkaForm" action="https://formspree.io/f/your-form-id" method="POST">
+          <div class="selected-products-preview">
+            <div class="selected-products-preview-label">Vybrané produkty</div>
+            <div id="modalProductTags"></div>
+          </div>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Jméno</label>
+              <input type="text" class="form-control" name="name" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Telefon</label>
+              <input type="tel" class="form-control" name="phone">
+            </div>
+            <div class="col-12">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" name="_replyto" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Doplňující informace</label>
+              <textarea class="form-control" name="message" rows="3" placeholder="Množství, termín dodání, dotazy…"></textarea>
+            </div>
+          </div>
+          <input type="hidden" name="produkty" id="hiddenProducts">
+          <div class="mt-4">
+            <button type="submit" class="btn-poptat" style="width:100%;">Odeslat poptávku</button>
+          </div>
+        </form>
+
+        <div id="formSuccess" class="text-center py-4" style="display:none;">
+          <div style="font-size:2.5rem; margin-bottom:1rem;">✓</div>
+          <h5 style="font-family:'Lora',serif; color:var(--dark-brown); margin-bottom:0.5rem;">Poptávka odeslána!</h5>
+          <p style="color:var(--warm-gray); font-size:0.9rem;">Ozveme se vám co nejdříve.</p>
+          <button type="button" class="btn-poptat mt-3" data-bs-dismiss="modal">Zavřít</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // ── SCROLL REVEAL ──
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.05 });
+  document.querySelectorAll('.reveal').forEach(r => revealObserver.observe(r));
+
+  // ── SELECTION ──
+  const selected = new Set();
+  const basketBar = document.getElementById('basketBar');
+  const basketCount = document.getElementById('basketCount');
+  const basketPreview = document.getElementById('basketPreview');
+
+  function updateBasket() {
+    basketCount.textContent = selected.size;
+    basketBar.classList.toggle('visible', selected.size > 0);
+    basketPreview.textContent = [...selected].join(', ');
+  }
+
+  document.querySelectorAll('.product-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const name = item.querySelector('.product-item-name').textContent;
+      if (selected.has(name)) {
+        selected.delete(name);
+        item.classList.remove('selected');
+      } else {
+        selected.add(name);
+        item.classList.add('selected');
+      }
+      updateBasket();
+    });
+  });
+
+  // ── CLEAR ──
+  document.getElementById('basketClear').addEventListener('click', () => {
+    selected.clear();
+    document.querySelectorAll('.product-item.selected').forEach(i => i.classList.remove('selected'));
+    updateBasket();
+  });
+
+  // ── OPEN MODAL ──
+  document.getElementById('btnPoptat').addEventListener('click', () => {
+    document.getElementById('modalProductTags').innerHTML =
+      [...selected].map(n => `<span class="selected-product-tag">${n}</span>`).join('');
+    document.getElementById('hiddenProducts').value = [...selected].join(', ');
+    new bootstrap.Modal(document.getElementById('poptavkaModal')).show();
+  });
+
+  // ── FORM SUBMIT ──
+  document.getElementById('poptavkaForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        form.style.display = 'none';
+        document.getElementById('formSuccess').style.display = 'block';
+      } else {
+        alert('Odeslání selhalo. Zkuste to prosím později.');
+      }
+    } catch {
+      alert('Odeslání selhalo. Zkuste to prosím později.');
+    }
+  });
+
+  // ── SEARCH ──
+  const allItems = document.querySelectorAll('.product-item');
+  const resultCount = document.getElementById('resultCount');
+
+  function updateCount() {
+    resultCount.textContent = document.querySelectorAll('.product-item:not(.hidden)').length + ' výrobků';
+  }
+
+  document.getElementById('searchInput').addEventListener('input', (e) => {
+    const q = e.target.value.toLowerCase().trim();
+    allItems.forEach(item => {
+      const name = item.querySelector('.product-item-name').textContent.toLowerCase();
+      item.classList.toggle('hidden', q && !name.includes(q));
+    });
+    updateCount();
+  });
+
+  // ── FILTER BUTTONS ──
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('.category-block').forEach(block => {
+        block.style.display = (filter === 'all' || block.dataset.category === filter) ? '' : 'none';
+      });
+      updateCount();
+    });
+  });
+
+  // ── TOC ACTIVE ──
+  window.addEventListener('scroll', () => {
+    let current = '';
+    document.querySelectorAll('.category-block').forEach(block => {
+      if (window.scrollY >= block.offsetTop - 120) current = block.id;
+    });
+    document.querySelectorAll('.toc-item').forEach(item => {
+      item.classList.toggle('active', item.getAttribute('href') === '#' + current);
+    });
+  });
+
+  updateCount();
+</script>
+</body>
+</html>

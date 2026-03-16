@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pekařství Šefl | Tlučná u Plzně</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  
+</head>
+
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="#">Pekařství <span>Šefl</span></a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#nav" style="color:var(--wheat)">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+        <li class="nav-item"><a class="nav-link" href="#nabidka">Nabídka</a></li>
+        <li class="nav-item"><a class="nav-link" href="#onas">O nás</a></li>
+        <li class="nav-item"><a class="nav-link" href="#kontakt">Kontakt</a></li>
+        <li class="nav-item"><a class="nav-link" href="#rozvoz">Rozvoz</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="hero-grain"></div>
+  <div class="container">
+    <div class="hero-content col-lg-8">
+      <span class="hero-eyebrow">Rodinné pekařství · Tlučná u Plzně</span>
+      <h1>Poctivé pečivo<br>z <em>rukou mistrů</em></h1>
+      <p class="hero-sub">Každé ráno, tradiční receptury, čerstvé suroviny.<br>Více než 30 let péče o chuť Vašeho stolu.</p>
+      <div class="d-flex gap-3 flex-wrap">
+        <a href="#nabidka" class="btn-gold">Naše nabídka</a>
+        <a href="#kontakt" class="btn-outline-gold">Kontaktovat nás</a>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="hero-scroll-line"></div>
+  </div>
+  <div class="hero-badge">
+    <strong>30+</strong>
+    <span>let tradice</span>
+  </div>
+</header>
+
+<!-- Strip -->
+<div class="strip">
+  <div class="strip-inner">
+    <span class="strip-item">Čerstvé každý den <span class="strip-sep">✦</span></span>
+    <span class="strip-item">Tradiční receptury <span class="strip-sep">✦</span></span>
+    <span class="strip-item">Rodinné pekařství <span class="strip-sep">✦</span></span>
+    <span class="strip-item">Kváskový chléb <span class="strip-sep">✦</span></span>
+    <span class="strip-item">Rozvoz do firem <span class="strip-sep">✦</span></span>
+    <span class="strip-item">Objednávky na míru <span class="strip-sep">✦</span></span>
+    <!-- duplicate for seamless -->
+    <span class="strip-item">Čerstvé každý den <span class="strip-sep">✦</span></span>
+    <span class="strip-item">Tradiční receptury <span class="strip-sep">✦</span></span>
+    <span class="strip-item">Rodinné pekařství <span class="strip-sep">✦</span></span>
+    <span class="strip-item">Kváskový chléb <span class="strip-sep">✦</span></span>
+    <span class="strip-item">Rozvoz do firem <span class="strip-sep">✦</span></span>
+    <span class="strip-item">Objednávky na míru <span class="strip-sep">✦</span></span>
+  </div>
+</div>
+
+<!-- Nabídka -->
+<section id="nabidka" class="py-5" style="padding: 7rem 0 !important;">
+  <div class="container">
+    <div class="text-center mb-5 reveal">
+      <span class="section-label">Co nabízíme</span>
+      <h2 class="section-title">Naše <em>nabídka</em></h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="row g-4">
+
+      <!-- CHLÉB -->
+      <div class="col-md-4 reveal reveal-delay-1">
+        <div class="product-card">
+          <div class="product-card-body">
+            <div class="card-icon">🥖</div>
+            <h4 class="product-card-title">Chléb</h4>
+            <p class="product-card-sub">Tradiční kváskové chleby pečené každý den</p>
+            <button class="btn-card"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#chlebList"
+                    aria-expanded="false">
+              Nejprodávanější
+            </button>
+            <div class="collapse product-list-collapse" id="chlebList">
+              <div class="product-row">
+                <img src="images/chleb-kminovy.jpg" alt="Kmínový chléb">
+                <div>
+                  <div class="product-row-name">Kmínový chléb</div>
+                  <div class="product-row-weight">1400 g</div>
+                </div>
+              </div>
+              <div class="product-row">
+                <img src="images/chleb-svetly.jpg" alt="Světlý chléb">
+                <div>
+                  <div class="product-row-name">Světlý chléb</div>
+                  <div class="product-row-weight">800 g</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BĚŽNÉ PEČIVO -->
+      <div class="col-md-4 reveal reveal-delay-2">
+        <div class="product-card">
+          <div class="product-card-body">
+            <div class="card-icon">🥐</div>
+            <h4 class="product-card-title">Běžné pečivo</h4>
+            <p class="product-card-sub">Rohlíky, bagety a každodenní pečivo</p>
+            <button class="btn-card"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#pecivoList"
+                    aria-expanded="false">
+              Nejprodávanější
+            </button>
+            <div class="collapse product-list-collapse" id="pecivoList">
+              <div class="product-list-item">Rohlík tukový <span>43 g</span></div>
+              <div class="product-list-item">Bageta světlá <span>120 g</span></div>
+              <div class="product-list-item">Houska velká <span>140 g</span></div>
+              <div class="product-list-item">Raženka <span>140 g</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLADKÉ -->
+      <div class="col-md-4 reveal reveal-delay-3">
+        <div class="product-card">
+          <div class="product-card-body">
+            <div class="card-icon">🍰</div>
+            <h4 class="product-card-title">Sladké pečivo</h4>
+            <p class="product-card-sub">Koláče, zákusky a sezónní dobroty</p>
+            <button class="btn-card"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#sladkeList"
+                    aria-expanded="false">
+              Nejprodávanější
+            </button>
+            <div class="collapse product-list-collapse" id="sladkeList">
+              <div class="product-list-item">Koláč tvarohový <span>90 g</span></div>
+              <div class="product-list-item">Koláč makový <span>95 g</span></div>
+              <div class="product-list-item">Kynutý závin <span>450 g</span></div>
+              <div class="product-list-item">Kobliha <span>60 g</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="cta-products reveal">
+      <p>Kompletní sortiment zahrnuje přes 100 druhů výrobků</p>
+      <a href="vyrobky.html" class="btn-gold">Zobrazit všechny produkty</a>
+    </div>
+  </div>
+</section>
+
+<!-- Rozvoz -->
+<section id="rozvoz">
+  <div class="container">
+    <div class="text-center mb-5 reveal">
+      <span class="section-label" style="color:var(--wheat); opacity:0.7;">Logistika</span>
+      <h2 class="section-title">Rozvoz <em style="color:var(--gold)">pečiva</em></h2>
+      <div class="section-divider"></div>
+      <p style="color:rgba(232,213,163,0.55); font-size:0.95rem; margin-top:1.2rem; font-weight:300;">
+        Zajišťujeme pravidelný rozvoz čerstvého pečiva
+      </p>
+    </div>
+
+    <div class="row g-4 mb-5">
+      <div class="col-md-4 reveal reveal-delay-1">
+        <div class="rozvoz-card">
+          <span class="rozvoz-icon">🏢</span>
+          <h5>Pro firmy</h5>
+          <p>Pravidelné dodávky do firem, škol a restaurací. Smluvní spolupráce s pevným harmonogramem.</p>
+        </div>
+      </div>
+      <div class="col-md-4 reveal reveal-delay-2">
+        <div class="rozvoz-card">
+          <span class="rozvoz-icon">⚖️</span>
+          <h5>Minimální odběr</h5>
+          <p>Podmínky dle individuální dohody. Přizpůsobíme se Vašim potřebám a možnostem.</p>
+        </div>
+      </div>
+      <div class="col-md-4 reveal reveal-delay-3">
+        <div class="rozvoz-card">
+          <span class="rozvoz-icon">📞</span>
+          <h5>Objednávky</h5>
+          <p>Telefonicky nebo e-mailem den předem. Rychlé potvrzení a spolehlivé doručení ráno.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center reveal">
+      <a href="#kontakt" class="btn-gold" data-bs-toggle="modal" data-bs-target="#kontaktModal">Nezávazně poptat rozvoz</a>
+    </div>
+  </div>
+</section>
+
+<!-- O nás -->
+<section id="onas">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-5 reveal">
+        <div class="onas-img-wrap">
+          <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=700&q=80" alt="Pekárna">
+          <div class="onas-img-badge">
+            Rodinná firma<br>od roku 1994
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-7 reveal reveal-delay-1" style="padding-left:3rem;">
+        <span class="section-label">Náš příběh</span>
+        <h2 class="section-title mb-4">Tradice, kvalita<br>a <em>poctivé řemeslo</em></h2>
+        <p class="onas-text mb-4">
+          Jsme rodinné pekařství s dlouholetou tradicí v Tlučné u Plzně. Zakládáme si na kvalitních surovinách a poctivém řemesle. Našim zákazníkům nabízíme běžné i celozrnné pečivo, tradiční chléb z přírodního kvasu i sladké koláče.
+        </p>
+        <p class="onas-text mb-4">
+          Na objednávku připravíme i svatební a pouťové koláče. Rodinná firma funguje již přes 30 let — naše zkušenosti nám umožňují nabízet pouze to nejkvalitnější. U nás máte jistotu čerstvosti každý den.
+        </p>
+        <div class="row g-3 mt-2">
+          <div class="col-4">
+            <div class="stat-box">
+              <span class="stat-number">30+</span>
+              <div class="stat-label">let tradice</div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="stat-box">
+              <span class="stat-number">100+</span>
+              <div class="stat-label">druhů výrobků</div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="stat-box">
+              <span class="stat-number">∞</span>
+              <div class="stat-label">spokojených zákazníků</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Kontakt -->
+<section id="kontakt">
+  <div class="container">
+    <div class="text-center mb-5 reveal">
+      <span class="section-label">Kde nás najdete</span>
+      <h2 class="section-title">Kontakt &amp; <em>otevírací doba</em></h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="row g-5 align-items-start">
+      <div class="col-lg-5 reveal">
+        <div class="info-block">
+          <div class="info-label">Adresa</div>
+          <div class="info-value">Hlavní 96<br>330 26 Tlučná</div>
+        </div>
+        <div class="info-block">
+          <div class="info-label">Telefon</div>
+          <div class="info-value">
+            <a href="tel:+420607691516" style="color:var(--dark-brown); text-decoration:none; font-weight:700;">+420 607 691 516</a>
+          </div>
+        </div>
+        <div class="info-block">
+          <div class="info-label">Otevírací doba</div>
+          <div class="hours-row"><span class="day">Pondělí – Pátek</span><span class="time">4:30 – 17:00</span></div>
+          <div class="hours-row"><span class="day">Sobota</span><span class="time">6:30 – 10:00</span></div>
+          <div class="hours-row"><span class="day">Neděle</span><span class="time" style="color:var(--accent)">Zavřeno</span></div>
+        </div>
+        <div class="mt-4">
+          <button type="button" class="btn-gold" data-bs-toggle="modal" data-bs-target="#kontaktModal">
+            Napsat zprávu
+          </button>
+        </div>
+      </div>
+
+      <div class="col-lg-7 reveal reveal-delay-1">
+        <div class="map-wrap">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2579.271196908304!2d13.234753077333133!3d49.72452097146264!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470a92cd4a3d2cbb%3A0x7b0c7b52c946933b!2zSGxhdm7DrSA5NiwgMzMwIDI2IFRsdcSNbsOh!5e0!3m2!1scs!2scz!4v1771598806168!5m2!1scs!2scz"
+            width="100%"
+            height="400"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <div class="footer-brand">Pekařství Šefl</div>
+        <div class="footer-sub">Hlavní 96 · 330 26 Tlučná · +420 607 691 516</div>
+      </div>
+      <div class="col-md-6 text-md-end mt-3 mt-md-0">
+        <a href="#nabidka" style="color:rgba(232,213,163,0.4); font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase; text-decoration:none; margin-left:1.5rem;">Nabídka</a>
+        <a href="#onas" style="color:rgba(232,213,163,0.4); font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase; text-decoration:none; margin-left:1.5rem;">O nás</a>
+        <a href="#kontakt" style="color:rgba(232,213,163,0.4); font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase; text-decoration:none; margin-left:1.5rem;">Kontakt</a>
+      </div>
+    </div>
+    <div class="footer-copy text-center">
+      &copy; 2026 Pekařství Šefl · Všechna práva vyhrazena
+    </div>
+  </div>
+</footer>
+
+<!-- Modal -->
+<div class="modal fade" id="kontaktModal" tabindex="-1" aria-labelledby="kontaktModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="kontaktModalLabel">Kontaktujte nás</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zavřít"></button>
+      </div>
+      <div class="modal-body">
+        <form id="kontaktForm" action="https://formspree.io/f/your-form-id" method="POST">
+          <div class="mb-3">
+            <label for="name" class="form-label">Jméno</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="_replyto" required>
+          </div>
+          <div class="mb-3">
+            <label for="message" class="form-label">Zpráva</label>
+            <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+          </div>
+          <button type="submit" class="btn-gold w-100" style="width:100%; text-align:center; justify-content:center;">Odeslat zprávu</button>
+        </form>
+        <div id="formSuccess" class="text-center py-3" style="display:none;">
+          <div style="font-size:2rem; margin-bottom:0.8rem;">✓</div>
+          <h5 style="font-family:'Playfair Display',serif; color:var(--dark-brown);">Děkujeme!</h5>
+          <p style="color:var(--warm-gray); font-size:0.9rem;">Vaše zpráva byla úspěšně odeslána.</p>
+          <button type="button" class="btn-gold" data-bs-dismiss="modal">Zavřít</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Form submit
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("kontaktForm");
+    const success = document.getElementById("formSuccess");
+    if (form) {
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        try {
+          const res = await fetch(form.action, { method:"POST", body: new FormData(form), headers:{'Accept':'application/json'} });
+          if (res.ok) { form.style.display="none"; success.style.display="block"; }
+          else alert("Odeslání selhalo. Zkuste to prosím později.");
+        } catch(err) { alert("Odeslání selhalo."); }
+      });
+    }
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    reveals.forEach(r => observer.observe(r));
+
+    // Navbar scroll effect
+    const nav = document.querySelector('.navbar');
+    window.addEventListener('scroll', () => {
+      nav.style.padding = window.scrollY > 60 ? '0.6rem 0' : '1.1rem 0';
+    });
+  });
+</script>
+
+</body>
+</html>
